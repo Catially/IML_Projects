@@ -3,7 +3,7 @@ import statistics
 from sklearn import linear_model
 from sklearn.metrics import mean_squared_error
 
-with open('train.csv', 'r') as traindata:
+with open('data/train.csv', 'r') as traindata:
     trainreader = csv.reader(traindata)
     trainheader = next(trainreader)
     trainx = []
@@ -14,7 +14,7 @@ with open('train.csv', 'r') as traindata:
         trainy.append(float(row[1]))
 
 
-with open('test.csv', 'r') as testdata:
+with open('data/test.csv', 'r') as testdata:
     testreader = csv.reader(testdata)
     testheader = next(testreader)
     testx = []
