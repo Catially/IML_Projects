@@ -4,7 +4,7 @@ import statistics
 import csv
 
 
-with open('train.csv', 'r') as file:
+with open('data/train.csv', 'r') as file:
     reader = csv.reader(file)
     header_row = next(reader)
     X_train = []
@@ -14,7 +14,7 @@ with open('train.csv', 'r') as file:
         y_train.append(float(row[1]))
  
 
-with open('test.csv', 'r') as file:
+with open('data/test.csv', 'r') as file:
     reader = csv.reader(file)
     header_row = next(reader)
     X_test = []
