@@ -1,54 +1,24 @@
-
-from sklearn.linear_model import Lasso
-from sklearn.linear_model import Ridge
-from sklearn.model_selection import cross_validate
+import pandas as pd
 import numpy as np
 import csv
-import statistics
+from sklearn import linear_model
 
-# Read training data
-with open('train.csv', 'r') as file:
-    reader = csv.reader(file)
-    header_row = next(reader)
-    X_train = []
-    y_train = []
-    for row in reader:
-        X_train.append(list(map(float, row[2:])))
-        y_train.append(float(row[1]))
+## read data
+data = pd.read_csv("train.csv")
+data = data.to_numpy()
+y = data[:,1]
+X = data[:,2:7]
 
-X_lin = np.array(X_train) 
-X_quad = np.power(X_train, 2) 
-X_exp = np.exp(X_train)
-X_cos = np.cos(X_train)
-X_const = np.array([1] * len(X_train))
-X = np.column_stack((X_lin, X_quad, X_exp, X_cos, X_const))
-y = np.array(y_train)
+# transform data
+X_transformed = np.concatenate((X, 
+                                np.power(X, 2), 
+                                np.exp(X), 
+                                np.cos(X), 
+                                np.ones([len(X), 1])), axis=1)
 
-# model = linear_model.LinearRegression()
-# model.fit(X, y)
+# model setup
+model = linear_model.Ridge(alpha=0.01, fit_intercept=False)
+reg = model.fit(X_transformed, y)
 
-# ridgemodel = Ridge(alpha = 0.001)
-# ridgemodel.fit(X,y)
-
-Lassomodel = Lasso(alpha = 0.001)
-Lassomodel.fit(X,y)
-
-print(Lassomodel.coef_)
-
-'''
-alphas = [0.001, 0.01, 0.1]
-avg_scores = []
-
-for alpha in alphas:
-    lassomodel = Lasso(alpha = alpha)
-    scores = cross_validate(lassomodel, X, y, cv = 7, scoring ='neg_root_mean_squared_error')
-    avg_scores.append(statistics.mean(-scores['test_score']))
-
-print(avg_scores)
-'''
-
-
-with open('sub.csv', 'w', newline='') as file:
-    writer = csv.writer(file)
-    for i in range(len(Lassomodel.coef_)):
-        writer.writerow([Lassomodel.coef_[i],])
+# output
+np.savetxt('sub.csv', reg.coef_, newline='\n')
