@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import cross_val_score
-from sklearn.neural_network import MLPClassifier
 from sklearn.experimental import enable_hist_gradient_boosting
 from sklearn.ensemble import HistGradientBoostingClassifier
 
@@ -58,6 +57,7 @@ print("Cross-validation score is {score:.3f},"
     .format(score = cv_score.mean(), err = cv_score.std()))
 
 # -----------------------------------------------------------
+
 model.fit(X_train, y_train)
 y_pred = model.predict(X_test)
 
